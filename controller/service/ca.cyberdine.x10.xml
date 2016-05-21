@@ -1,0 +1,55 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="ca.cyberdine.x10">
+    <signal name="CommandCompleted">
+      <arg name="channel" type="s" direction="out"/>
+      <arg name="unit" type="u" direction="out"/>
+      <arg name="command" type="s" direction="out"/>
+      <arg name="value" type="i" direction="out"/>
+    </signal>
+    <signal name="PropertyUpdated">
+      <arg name="name" type="s" direction="out"/>
+      <arg name="value" type="s" direction="out"/>
+    </signal>
+    <signal name="SourceUpdated">
+      <arg name="address" type="s" direction="out"/>
+      <arg name="value" type="i" direction="out"/>
+    </signal>
+    <method name="Send">
+      <arg name="channel" type="s" direction="in"/>
+      <arg name="unit" type="u" direction="in"/>
+      <arg name="command" type="s" direction="in"/>
+    </method>
+    <method name="Set">
+      <arg name="channel" type="s" direction="in"/>
+      <arg name="unit" type="u" direction="in"/>
+      <arg name="value" type="i" direction="in"/>
+    </method>
+    <method name="AllOn">
+    </method>
+    <method name="AllOff">
+    </method>
+    <method name="GetValue">
+      <arg type="i" direction="out"/>
+      <arg name="source" type="s" direction="in"/>
+    </method>
+    <method name="GetProperty">
+      <arg type="s" direction="out"/>
+      <arg name="name" type="s" direction="in"/>
+    </method>
+    <method name="SetProperty">
+      <arg name="name" type="s" direction="in"/>
+      <arg name="value" type="s" direction="in"/>
+    </method>
+    <method name="Start">
+    </method>
+    <method name="Stop">
+    </method>
+    <method name="Restart">
+    </method>
+    <method name="Reload">
+    </method>
+    <method name="Quit">
+    </method>
+  </interface>
+</node>

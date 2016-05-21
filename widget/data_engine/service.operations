@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM
+    "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+<kcfg>
+  <group name="Start"/>
+  <group name="Stop"/>
+  <group name="Reload"/>
+  <group name="AllOn"/>
+  <group name="AllOff"/>
+  <group name="SendCommand">
+	<entry name="Channel" type="String">
+      <label>Channel to use</label>
+    </entry>
+    <entry name="Unit" type="Int">
+      <label>Unit to use</label>
+    </entry>
+	<entry name="Command" type="String">
+		<label>The command to execute.</label>
+	</entry>
+  </group>
+  <group name="SetCommand">
+	  <entry name="Channel" type="String">
+		  <label>Channel to use</label>
+	  </entry>
+	  <entry name="Unit" type="Int">
+		  <label>Unit to use</label>
+	  </entry>
+	  <entry name="Value" type="Int">
+		  <label>The value to set, -1 off.</label>
+	  </entry>
+  </group>
+  <group name="SetProperty">
+          <entry name="Property" type="String">
+                  <label>Name of Property to update</label>
+          </entry>
+          <entry name="Value" type="String">
+                  <label>New value of property</label>
+          </entry>
+  </group>
+</kcfg>

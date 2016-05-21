@@ -1,0 +1,38 @@
+.\" Manpage for x10.
+.\" Contact altagir@gmail.com to correct errors or typos.
+.TH man 8 "1 Nov 2013" "1.0" "x10 man page"
+.SH NAME
+x10 \- control a X10 CM19A controller through DBUS
+.SH SYNOPSIS
+x10 [options]
+.SH DESCRIPTION
+x10 cmd line is a tool used to send remote commands to the X10 service.
+.LP
+this tool belongs to x10-widget package which is a KDE4 interface to remotely
+control X10 devices using a CM15/19 X10 controller.
+.SH OPTIONS
+help | version        -> get usage & version
+.PP
+status                -> get status of connected controller
+.PP
+address               -> get value for address (i.e. x10 e2)
+.PP
+address [+|-|s|b]     -> on|off|soften|brighten
+.PP
+address {-1..7}       -> set to value -1(off), 0..7
+.PP
+all on/+ | off/- | allon | alloff
+.PP
+properties | p | prop -> list all properties
+.PP
+propertyName          -> get value for property
+.PP
+propertyName value    -> set value if allowed (e.g. SmartQueue)
+.PP
+sample   :  x10 e2; x10 e2 + ; x10 e2 3;
+
+.SH SEE ALSO
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Sebastien Senechal (altagir@gmail.com)

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=x10
+Comment=Plasmoid X10
+Type=Service
+Icon=x10
+X-KDE-ServiceTypes=Plasma/Applet
+X-KDE-Library=plasma_applet_x10
+X-KDE-PluginInfo-Author=Sebastien Senechal
+X-KDE-PluginInfo-Email=altagir@gmail.com
+X-KDE-PluginInfo-Name=x10
+X-KDE-PluginInfo-Version=0.6.5
+X-KDE-PluginInfo-Website=http://opendesktop.org/content/show.php/X10+Controller+Plasma+Widget?content=157168
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true

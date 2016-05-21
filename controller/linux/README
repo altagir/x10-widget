@@ -1,0 +1,73 @@
+USB X10-CM19A CONTROLLER KERNEL DRIVER 
+=======================================
+
+widget can control it directly and this use is prefered.
+but this is supplied as reference and just to show how to 
+use / build a kernel driver in this environment.
+
+The source code for this driver is coming from :
+http://m.lemays.org/projects/x10-cm19a-linux-driver
+
+- Slightly modified to compile on latest kernel
+- Slightly adapted Makefile
+- added CMake for automatic build in solution / kdevelop
+
+INCONVENIENTS:
+==============
+- need to be compile at every kernel
+- cannot read incoming events
+- kinda less stable than using directly libusb.
+  libusb is way preferable. can be unloaded/reloaded,
+  handling issues without user intervention.
+
+BLACKLIST.CONF :
+================
+
+- If you use this driver, add to /etc/modprobe.d/blacklist.conf
+blacklist ati-remote
+blacklist lirc_atiusb
+
+- To disable this driver, if you plan to let the widget access the device through libusb, ADD:
+blacklist x10_cm19a
+
+
+LOADING :
+=========
+   sudo modprobe x10-cm19a
+   chmod go+rw /dev/cm19a*
+   
+   I do now know how to set writeable access automatically for this device.
+   If driver is loaded, libusb will NOT have access (device already used)
+
+to remove: 
+   sudo rmmod x10_cm19a
+
+To compile :
+============
+- either use the provided Makefile
+   cd linux
+   make
+   sudo make install
+
+- or if you want to use CMake
+   cd linux/drivers/usb/comm/
+   cmake .
+   make
+   sudo make install
+
+
+modprobe x10-cm19a
+
+dont' forget to install $SRC/x10core/cm19a.rules in /etc/udev/rules.d/
+else you will have to 
+chmod +rw /dev/cm19a*
+
+Usage:
+======
+echo "-e1 " > /dev/cm19a0	E1 -> off
+echo "+e2 " > /dev/cm19a0	E2 -> on
+echo "se3 " > /dev/cm19a0	E2 -> soften
+echo "be3 " > /dev/cm19a0	E2 -> brighten
+
+
+voila.

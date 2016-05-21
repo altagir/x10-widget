@@ -1,0 +1,43 @@
+#!/bin/sh
+# postrm script
+#
+# This script typically modifies links or other files associated with package,
+# and/or removes files created by it.
+
+
+if [ "$1" = purge ]; then
+    # Removes all files installed
+
+    # LOGS
+    if [ -d /var/log/x10 ]; then
+        if [ -f /var/log/x10/x10.log ]; then
+            rm -f /var/log/x10/x10.log
+        fi        
+        rmdir --ignore-fail-on-non-empty /var/log/x10
+    fi
+
+    if [ -f /var/log/x10.log ]; then
+        rm -f /var/log/x10.log
+    fi
+
+    # VAR/SPOOL
+    if [ -d /var/spool/x10 ]; then
+        if [ -f /var/spool/x10/data.conf ]; then
+            rm -f /var/spool/x10/data.conf
+        fi
+
+        if [ -f /var/spool/x10/rules.conf ]; then
+            rm -f /var/spool/x10/rules.conf
+        fi
+        rmdir --ignore-fail-on-non-empty /var/spool/x10
+    fi
+
+    if [ -e /usr/share/debconf/confmodule ]; then
+        # Source debconf library.
+        . /usr/share/debconf/confmodule
+        # Remove my changes to the db.
+        db_purge
+    fi
+fi
+
+exit 0

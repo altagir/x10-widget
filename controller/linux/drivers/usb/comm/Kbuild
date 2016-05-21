@@ -1,0 +1,2 @@
+obj-m += x10_cm19a.o
+x10_cm19a-objs := x10-cm19a.o

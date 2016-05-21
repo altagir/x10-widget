@@ -1,0 +1,50 @@
+#!/bin/sh
+ 
+# Exit on error
+set -e
+ 
+# Source debconf library.
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+# This conf script is capable of backing up
+db_capb backup
+
+
+STATE=1 
+while [ "$STATE" != 0 -a "$STATE" != 4 ]; do
+    case "$STATE" in
+    1)
+        # Ask questions
+        db_input high x10-widget/dbus-isServer || true
+#         db_go || true
+    ;;
+    
+    2)
+        # Check their answer.
+        db_get x10-widget/dbus-isServer
+        isController=$RET
+
+        if [ "$isController" = "Client" ]; then
+            db_input high x10-widget/dbus-remote-address || true
+        else
+            # Controller
+            db_input high x10-widget/dbus-local-address || true
+        fi
+    ;;
+    
+    3)
+        if [ "$isController" = "Client" ]; then
+            db_input low x10-widget/dbus-remote-port || true
+        else
+            db_input low x10-widget/dbus-local-port || true
+        fi
+    ;;
+    esac
+
+    if db_go; then
+        STATE=$(($STATE + 1))
+    else
+        STATE=$(($STATE - 1))
+    fi
+done

@@ -1,0 +1,5 @@
+# Defaults for /etc/init.d/x10-daemon
+
+# logging
+export DEBUG=0
+export ENABLE_COLOR=1

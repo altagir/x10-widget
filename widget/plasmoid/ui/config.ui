@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConfigSettings</class>
+ <widget class="QWidget" name="ConfigSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>365</width>
+    <height>244</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>X10 Settings</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QFormLayout" name="formLayout">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+       </property>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_DefaultLighting">
+         <property name="text">
+          <string>Default Lighting</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="spinBoxDefaultLighting">
+         <property name="toolTip">
+          <string>Default Intensity for device when powered on (Used in new Nodes)</string>
+         </property>
+         <property name="suffix">
+          <string> %</string>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_DefaultSwitchOffPeriod">
+         <property name="text">
+          <string>Default Switch Off</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="spinBoxDefaultSwitchOffPeriod">
+         <property name="toolTip">
+          <string>Default Switch Off period for devices upon any intensity change (Used in new Nodes)</string>
+         </property>
+         <property name="suffix">
+          <string> mn</string>
+         </property>
+         <property name="prefix">
+          <string/>
+         </property>
+         <property name="maximum">
+          <number>1440</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="checkBoxSwitchOffWhenDimmedTo0">
+         <property name="toolTip">
+          <string>When selected, light will be switched off when intensity reaches 0, after a period of time.</string>
+         </property>
+         <property name="text">
+          <string>Switch Off when dimmed to 0 after</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="spinBoxSwitchOffWhenDimmedTo0">
+         <property name="toolTip">
+          <string>Time to wait to switch off when intensity reaches 0.</string>
+         </property>
+         <property name="suffix">
+          <string> s</string>
+         </property>
+         <property name="prefix">
+          <string/>
+         </property>
+         <property name="maximum">
+          <number>102</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="checkBoxRememberLastIntensity">
+         <property name="toolTip">
+          <string>When selected, device will come back to last intensity, if intensity level is above a certain point (not to lit lights at lowest level)</string>
+         </property>
+         <property name="text">
+          <string>Remember last Intensity when above</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="spinBoxRememberLastIntensity">
+         <property name="toolTip">
+          <string>If previous intensity of device is below that level, number indicated here will be used (e.g. to fix minimum default light intensity to 30%)</string>
+         </property>
+         <property name="suffix">
+          <string> %</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxController">
+       <property name="title">
+        <string>Controller</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_controller" stretch="0,2,0,1,0,0,0">
+          <item>
+           <widget class="QLabel" name="labelUsing">
+            <property name="text">
+             <string>Using</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditControllerIP">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>FF:FF:FF:FF</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelPort">
+            <property name="text">
+             <string>port</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditControllerPort">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>12345</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_ControllerStatus">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>NA</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonReload">
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="view-refresh"/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxUseSmartQueue">
+          <property name="toolTip">
+           <string>Use a smart queue to reach fastest desired intensity (else commands are queued up)</string>
+          </property>
+          <property name="text">
+           <string>Smart Queue</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>17</width>
+         <height>18</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_buttons">
+       <item>
+        <widget class="QPushButton" name="pushButtonDefaults">
+         <property name="toolTip">
+          <string>Restore Defaults</string>
+         </property>
+         <property name="text">
+          <string>&amp;Defaults</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>33</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>spinBoxDefaultLighting</tabstop>
+  <tabstop>spinBoxDefaultSwitchOffPeriod</tabstop>
+  <tabstop>checkBoxSwitchOffWhenDimmedTo0</tabstop>
+  <tabstop>spinBoxSwitchOffWhenDimmedTo0</tabstop>
+  <tabstop>checkBoxRememberLastIntensity</tabstop>
+  <tabstop>spinBoxRememberLastIntensity</tabstop>
+  <tabstop>pushButtonDefaults</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

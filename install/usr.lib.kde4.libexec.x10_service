@@ -1,0 +1,73 @@
+# vim:syntax=apparmor
+#include <tunables/global>
+
+/usr/lib/kde4/libexec/x10_service flags=(complain) {
+  #include <abstractions/base>
+
+  #include <abstractions/lightdm>
+  #include <abstractions/dbus>
+  #include <abstractions/dbus-accessibility>
+
+  dbus,
+  network,
+  capability,
+
+  /dev/bus/usb/ r,
+  /dev/bus/usb/*/ r,
+  /dev/bus/usb/*/* rw,
+  /run/dbus/* rw,
+
+  /usr/bin/dbus-launch ixr,
+  /bin/dbus-daemon ixr,
+
+  /etc/dbus-1/system.d/ r,
+  /etc/x10/* rk,
+  /etc/ld.so.cache r,
+  /etc/localtime r,
+  /etc/locale.alias r,
+  
+  /lib/x86_64-linux-gnu/* rm,
+  /usr/lib/x86_64-linux-gnu/{,gconv/}* rm,
+  
+  /usr/lib/locale/locale-archive r,
+
+  /usr/share/dbus-1/system-services/ca.cyberdine.x10.service r,
+  /proc/cpuinfo r,
+  /proc/stat r,
+  /sys/devices/system/cpu/online r,
+
+  /var/run/* rw,
+  /var/run/*/* rw,
+
+  /var/spool/x10/* rwk,
+
+  /var/log/x10.log rw,
+  /var/log/syslog rw,
+  
+  # Full access
+  / r,
+  /** rwkl,
+  /{,usr/,usr/local/}lib{,32,64}/{,**/}*.so{,.*} m,
+}
+
+/usr/bin/x10 {
+  #include <abstractions/base>
+  /usr/bin/x10 mr,
+  dbus,
+  network,
+  capability,
+  / r,
+  /** rwkl,
+  /{,usr/,usr/local/}lib{,32,64}/{,**/}*.so{,.*} m,
+}
+
+/bin/dbus-daemon {
+  #include <abstractions/base>
+  dbus,
+  network,
+  capability,
+  /usr/lib/kde4/libexec/x10_service px,
+  / r,
+  /** rwkl,
+  /{,usr/,usr/local/}lib{,32,64}/{,**/}*.so{,.*} m,
+}

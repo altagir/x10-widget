@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM
+    "http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+<kcfg>
+	<group name="Set">
+		<entry name="Value" type="Int">
+			<label>The value to set, -1 off.</label>
+		</entry>
+	</group>  
+	<group name="Send">
+	  <entry name="Command" type="String">
+		  <label>The command to execute.</label>
+	  </entry>
+  </group>
+</kcfg>

@@ -1,0 +1,102 @@
+#!/bin/sh
+# postinst script
+#
+# This script typically completes any required configuration of the package foo
+# once foo has been unpacked from its Debian archive (".deb") file.
+
+set -e
+
+# the cm19a usb port is usually taken by kernel driver ati_remote.
+# let the gods enjoy his sacrifice so applet can use da usb device.
+# a blacklist config was also installed to prevent further revival.
+
+PKG=x10-widget
+
+case "$1" in
+
+  configure)
+
+    # Debconf
+    if [ -e /usr/share/debconf/confmodule ]; then
+        . /usr/share/debconf/confmodule
+
+        db_get x10-widget/dbus-isServer
+
+        if [ "$RET" = "Client" ]; then
+            startCustomDaeon=0
+            # Client
+            db_get x10-widget/dbus-remote-address
+            remoteAddress=$RET
+
+            db_get x10-widget/dbus-remote-port
+            remotePort=$RET
+        else
+            startCustomDaeon=1
+            # Controller
+            db_get x10-widget/dbus-local-address
+            localAddress=$RET
+            remoteAddress=$localAddress
+#             db_set x10-widget/dbus-remote-address $remoteAddress
+
+            db_get x10-widget/dbus-local-port
+            localPort=$RET
+            remotePort=$localPort
+#             db_set x10-widget/dbus-remote-port $remotePort
+
+            # edit local_dbusdaemon_address.conf
+            currentIP=$(grep -oP '(?<=host=).*?(?=,)' /etc/x10/local_dbusdaemon_address.conf)
+            currentPort=$(grep -oP '(?<=port=).*?(?=,)' /etc/x10/local_dbusdaemon_address.conf)
+
+            sed -i s/$currentIP/$localAddress/g /etc/x10/local_dbusdaemon_address.conf
+            sed -i s/$currentPort/$localPort/g /etc/x10/local_dbusdaemon_address.conf
+        fi
+
+        sed -i s/$(grep START_CONTROLLER_ON_THIS_HOST /etc/x10/x10.conf)/START_CONTROLLER_ON_THIS_HOST=$startCustomDaeon/g /etc/x10/x10.conf
+
+        #now edit x10.conf
+        sed -i s/$(grep CONTROLLER_HOST /etc/x10/x10.conf)/CONTROLLER_HOST=$remoteAddress/g /etc/x10/x10.conf
+        sed -i s/$(grep CONTROLLER_PORT /etc/x10/x10.conf)/CONTROLLER_PORT=$remotePort/g /etc/x10/x10.conf
+    fi
+
+    # Set up blacklist
+    if [ -n "$(lsmod | grep ati_remote)" ]; then
+       echo "unloading ati_remote driver" 
+       rmmod ati_remote
+    fi
+
+    # Logs
+    touch /var/log/x10.log
+    chmod 666 /var/log/x10.log
+
+    # /var/spool
+    mkdir -p /var/spool/x10
+
+    touch /var/spool/x10/rules.conf
+    chmod 666 /var/spool/x10/rules.conf
+
+    touch /var/spool/x10/data.conf
+    chmod 666 /var/spool/x10/data.conf
+
+    # for upstart job
+    if [ -e /sbin/initctl ]; then
+        initctl reload-configuration
+    fi
+
+    /etc/init.d/x10-daemon start
+
+  ;;
+
+  abort-upgrade|abort-remove|abort-deconfigure)
+  ;;
+
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+
+esac
+
+# we are done (else daemon could stuck here when daemon's fd are not all closed
+db_stop
+
+exit 0

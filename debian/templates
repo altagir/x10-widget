@@ -1,0 +1,32 @@
+Template: x10-widget/dbus-isServer
+Type: select
+Choices: Client, Controller
+Default: Controller
+Description: Configure as
+ Does this machine directly controls the CM19A USB device or does it connect to a remote controller.
+
+Template: x10-widget/dbus-local-address
+Type: string
+Default: 127.0.0.1
+Description: DBUS Listening Interface
+ What is the public interface (i.e. eth0's IP) this daemon should listen to for incoming commmands?
+ .
+ this will open a DBUS daemon listening on that address.
+
+Template: x10-widget/dbus-local-port
+Type: string
+Default: 14500
+Description: DBUS Listening Port
+ What is the port this daemon should listen to
+
+Template: x10-widget/dbus-remote-port
+Type: string
+Default: 14500
+Description: DBUS Remote Port
+ Enter the port used for the controller
+
+Template: x10-widget/dbus-remote-address
+Type: string
+Default: 127.0.0.1
+Description: DBUS Remote Host
+ Enter the IP's host of the X10 Controller

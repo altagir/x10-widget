@@ -1,0 +1,176 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          x10-daemon
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: x10-daemon
+# Description:       Used to launch both the dbus-daemon (required for remote access) and the x10_service (main program controlling the CM19A usb device)
+### END INIT INFO
+
+# /etc/init.d/x10-daemon
+# Version:      @(#)x10-daemon  1.0  23-Nov-2013  altagir@gmail.com
+
+PATH='/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+DAEMON='/usr/lib/kde4/libexec/x10_service'
+
+DBUS_DAEMON_OPTS='--config-file=/etc/dbus-1/x10_dbus_daemon.conf --print-address'
+DAEMON_OPTS="-d -l /var/log/x10.log"
+
+NAME='x10-daemon'
+DESC='X10 Daemon'
+
+test -x $DAEMON || exit 0
+
+# Include x10daemon defaults if available
+if [ -f /etc/default/x10-daemon ] ; then
+    # DEBUG, ENABLE_COLOR
+    . /etc/default/x10-daemon
+fi
+
+set -e
+
+PID_DBUSDAEMON=$(ps aux  |  grep '[x]10_dbus_daemon.conf'  | awk '{print $2}')
+PID_X10SERVICE=$(ps aux  |  grep '[x]10_service'  | awk '{print $2}')
+
+#echo "X10 service : $PID_X10SERVICE"
+#echo "DBUS daemon : $PID_DBUSDAEMON"
+
+case "$1" in
+start)
+
+    if [ -z "$(grep "START_CONTROLLER_ON_THIS_HOST=0" /etc/x10/x10.conf)" ]; then
+
+        if [ -z "$PID_DBUSDAEMON" ] && [ -z "$(grep "USE_LOCAL_SYSTEM_BUS=1" /etc/x10/x10.conf)" ]; then
+
+            if [ -e /sbin/initctl ]; then
+                sudo start x10dbus > /dev/null
+            else
+                dbus-daemon $DBUS_DAEMON_OPTS
+            fi
+
+            PID_DBUSDAEMON=$(ps aux  |  grep '[x]10_dbus_daemon.conf'  | awk '{print $2}')
+            if [ -z "$PID_DBUSDAEMON" ]; then
+                echo "Starting DBUS Daemon     : FAIL"
+            else
+                echo "Starting DBUS Daemon     : OK"
+            fi
+        fi
+
+        if [ -z "$PID_X10SERVICE" ]; then
+            echo -n "Starting X10 Service     : "
+
+            $DAEMON $DAEMON_OPTS
+            sleep 0.5
+
+            PID_X10SERVICE=$(ps aux  |  grep '[x]10_service'  | awk '{print $2}')
+            if [ -z "$PID_X10SERVICE" ]; then
+                echo "FAIL"
+            else
+                echo "OK"
+            fi
+        fi
+#     else
+#         echo "Services not required on this machine (client), no need to run DBus and service..."
+#         echo "set START_CONTROLLER_ON_THIS_HOST=1 in /etc/x10/x10.conf or run"
+#         echo "'dpkg-reconfigure x10-widget' and configure host as controller."
+    fi
+    
+    exit 0
+    ;;
+
+stop)
+
+    if [ -n "$PID_X10SERVICE" ]; then
+        kill -1 $PID_X10SERVICE
+        
+        echo -n "Stopping X10 Service     : "
+        count=0
+        while [ -n "$(ps aux  |  grep '[x]10_service'  | awk '{print $2}')" ]; do
+            sleep 0.25
+            count=$((count+1))
+            if [ $count -gt 20 ]; then # 5 secs
+                echo "FAIL"
+                break;
+            fi
+        done
+
+        if [ -n "$PID_X10SERVICE" ]; then
+            echo "OK"
+        fi
+    fi
+    
+    if [ -n "$PID_DBUSDAEMON" ]; then
+        if [ -e /sbin/initctl ]; then
+            sudo stop x10dbus > /dev/null
+        else
+            kill "$PID_DBUSDAEMON"
+        fi
+        echo "Stopping DBus Daemon     : OK"
+    fi
+    exit 0
+    ;;
+
+status)
+    echo -n "DBUS Daemon:  "
+    if [ -n "$PID_DBUSDAEMON" ]; then
+        echo "ON";
+    else
+        echo "OFF";
+    fi
+
+    echo -n "X10 service:  "
+    if [ -n "$PID_X10SERVICE" ]; then
+        echo "ON";
+    else
+        echo "OFF";
+    fi
+
+    ;;
+
+reload|force-reload)
+    #
+    #	If the daemon can reload its config files on the fly
+    #	for example by sending it SIGHUP, do it here.
+    #
+    #	If the daemon responds to changes in its config file
+    #	directly anyway, make this a do-nothing entry.
+
+    echo "Reloading $DESC configuration files."
+    x10 restart
+    ;;
+
+restart)
+    #
+    #	If the "reload" option is implemented, move the "force-reload"
+    #	option to the "reload" entry above. If not, "force-reload" is
+    #	just the same as "restart".
+    #
+
+    /etc/init.d/x10-daemon stop
+    /etc/init.d/x10-daemon start
+    ;;
+
+kill)
+	if [ -n "$PID_X10SERVICE" ]; then
+        # Butchering
+        kill -9 $PID_X10SERVICE
+        echo "Killing X10 Service     : OK"
+    fi
+    
+    if [ -n "$PID_DBUSDAEMON" ]; then
+		kill "$PID_DBUSDAEMON"
+		echo "Killing DBus Daemon     : OK"
+	fi
+    ;;
+*)
+    N=/etc/init.d/$NAME
+    echo "Usage: $N {start|stop|restart|reload|kill}" >&2
+    #echo "Usage: $N {start|stop|restart|force-reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0

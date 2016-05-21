@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=ca.cyberdine.x10
+Exec=@CMAKE_INSTALL_PREFIX@/lib/kde4/libexec/x10_service
+User=root
+UpstartJob=true

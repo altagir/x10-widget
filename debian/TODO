@@ -1,0 +1,4 @@
+next major version will be 1.0.0
+
+- tweak read from usb (i.e remote) -> gaussage
+- apparmor profile -> pending bug on dbus

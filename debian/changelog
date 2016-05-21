@@ -1,0 +1,240 @@
+x10-widget (0.6.5) UNRELEASED; urgency=low
+
+  * prep
+
+ -- Sébastien Sénéchal <altagir@cyberdine.ca>  Wed, 11 Dec 2013 20:32:27 -0500
+
+x10-widget (0.6.4) unstable; urgency=low
+
+  * improved debian packaging (don't replace config files)
+
+ -- Sébastien Sénéchal <altagir@cyberdine.ca>  Wed, 11 Dec 2013 11:59:37 -0500
+
+x10-widget (0.6.3) unstable; urgency=high
+
+  * Fix rules could stop after first exec.
+  * Fix plasma crash when updating rules in widget
+  * DBus improvements (reconnection & error handling)
+  * improved service (reload, check connectivity & daemon improvements)
+  * improved x10 cmd (reload, quit check for process)
+  * improved debian packaging & scripts (data files not overwritten in upgrade)
+
+ -- Sébastien Sénéchal <altagir@cyberdine.ca>  Tue, 10 Dec 2013 22:35:01 -0500
+
+x10-widget (0.6.2) unstable; urgency=low
+
+  * debconf asks now questions for the service configuration (Controller/Remote, IP, [Port])
+  * To reconfigure: 'sudo dpkg-reconfigure x10-widget'
+  * kill command for daemon and improved script
+
+ -- Sébastien Sénéchal <seb@cyberdine.ca>  Tue, 19 Nov 2013 21:51:29 -0500
+
+x10-widget (0.6.1) unstable; urgency=low
+
+  * automatic DBus reconnection when lost
+  * various tuneups (config / dbus handling)
+
+ -- seb <seb@cyberdine.ca>  Mon, 18 Nov 2013 21:11:58 -0500
+
+x10-widget (0.6.0) unstable; urgency=low
+
+  * DBUS REMOTE!
+  *   This is achieved through a custom dbus-daemon (/etc/dbus-1/x10_dbus_daemon.conf)
+  *    listening on port 14500 (default).
+  *   Whenever a client sends a request on that dbus interface, system will launch
+  *    automatically x10_service, which controls the CM19A interface.
+  *
+  * --- CONFIG ---
+  * in /etc/x10/x10.conf, parameter USE_LOCAL_SYSTEM_BUS
+  *   - enable to use local kde system DBUS, i.e. no remote (like before, doesn't require
+  *      the dbus to be launched)
+  *   - disable (default) to specify a remote machine as the controller to connect to
+  *     This will start a new daemon-bus listening on port 14500 (default) that will launch
+  *     x10_service (the CM19A controller) automatically upon receiving request from network.
+  *
+  * On all clients machine (using widgets or x10 cmd line), adapt /etc/x10/x10.conf
+  *    set CONTROLLER_HOST [& CONTROLLER_PORT] to controller's ip [, port], e.g. 10.0.0.15 14500
+  *
+  * On Controller (which holds the CM19A), adapt x10.conf as well & local_dbusdaemon_address.conf
+  *    set same IP and Port from above e.g. <listen>tcp:host=10.0.0.15,bind=*,port=14500</listen>
+  *
+  * The dbus-daemon is started automatically when dbus is started (or through the init script 
+  *    /etc/init.d/x10-daemon start. that init script doesn't need to be loaded on boot unless
+  *    your system doesn't support upstart job (like pi raspberry). launch that script on init 5 lvl
+
+ -- Sebastien Senechal <altagir@gmail.com>  Wed, 30 Oct 2013 10:37:27 -0400
+
+x10-widget (0.5.2) unstable; urgency=high
+
+  * Fix debian packaging... missing config files!
+  * Fix dbus remote being rejected (apparmor used since dbus 1.6.12)
+
+ -- Sebastien Senechal <altagir@gmail.com>  Thu, 24 Oct 2013 19:29:12 -0400
+
+x10-widget (0.5.1) unstable; urgency=low
+
+  * adapt config ui size, fix a few ui glitches in rules config
+
+ -- Sebastien Senechal <altagir@gmail.com>  Sat, 19 Oct 2013 20:02:40 -0400
+
+x10-widget (0.5.0) unstable; urgency=low
+
+  * Rules :
+  * - New config panel for preconfigured events/actions (A* *)
+  * - rules saved by default in /var/spool/x10/rules.conf
+  * - rules are saved and executed by x10_service
+  * Fix auto-off timer being cancelled when lighting on and dimming to given value
+  * Fix cmake not finding proper system_bus_services_dir in 64bits...
+  * Fix DEB packaging -> upgradeable, added postinst and prerm scripts
+  * Remove timeout increase with Ctrl/Shift click.
+  * x10_service demonized (-d) and location changed from /usr/bin to /usr/lib/kde4/libexec/
+  * add ati_remote to blacklist.conf
+  * always send command off even if already off, allow use of "on|off" in cmd line
+  * various improvements
+
+ -- Sebastien Senechal <altagir@gmail.com>  Tue, 15 Oct 2013 23:30:15 -0400
+
+x10-widget (0.4.5) stable; urgency=low
+
+  * Fix down button
+
+ -- Sebastien Senechal <altagir@gmail.com>  Sat, 28 Sep 2013 21:56:56 -0400
+
+x10-widget (0.4.4) stable; urgency=low
+
+  * Fix cmake failing when both qt4 and qt5-base are installed (qmake refers to the 5.x version, so force cmake to use Qt4)
+
+ -- Sebastien Senechal <altagir@gmail.com>  Fri, 20 Sep 2013 10:45:51 -0400
+
+x10-widget (0.4.3) stable; urgency=low
+
+  * remove dependency kde-workspace. not required for arm package or future server
+
+ -- Sebastien Senechal <altagir@gmail.com>  Tue, 27 Aug 2013 19:24:33 -0400
+
+x10-widget (0.4.2) stable; urgency=low
+
+  * changing adress in config updates value from x10_service (GetValue prop)
+  * x10 e2 -> get current value
+  * file logging capability for x10_service (-l | --log filename)
+  * /etc/x10.conf (max_errors, auto-reload driver) -> unused yet
+  * x10 cmd line improvements
+  * fix: "x10 restart" & quitting last widget made x10_service process exit
+  * move dbus from session to system
+
+ -- Sebastien Senechal <altagir@gmail.com>  Mon, 22 Jul 2013 19:26:30 -0400
+
+x10-widget (0.4.1) stable; urgency=low
+
+  * change icon button type
+
+ -- Sebastien Senechal <altagir@gmail.com>  Thu, 11 Jul 2013 12:17:48 -0400
+
+x10-widget (0.4.0) unstable; urgency=low
+
+  * DBUS Service !!! Design complete
+  * There are now 2 control utilities (UI & cmd line)
+      - x10 widget  : KDE plasma widget
+      - x10         : cmd line utility, e.g. :
+         x10 e2 + : e2 on (- | + | s | b)
+         x10 e2 5 : dim to 5 (-1 to 7)
+         x10 status | start | stop | quit
+  * There is now a new daemon
+      - x10_service :
+         - DBus Daemon now holding X10 Queue Manager & controlling
+           the CM19A device.
+         - loaded on demand, used by x10 cmd line & data_engine
+         - to unload use "x10 quit"
+  * Some minor improvements
+
+ -- Sebastien Senechal <altagir@gmail.com>  Sun, 05 May 2013 11:02:53 -0400
+
+x10-widget (0.3.3) unstable; urgency=low
+
+  * SetProperty
+  * Timeout increase
+  * improvements and fixes
+
+ -- Sebastien Senechal <altagir@gmail.com>  Fri, 03 May 2013 01:02:44 -0400
+
+x10-widget (0.3.2) unstable; urgency=low
+
+  * bug fix, queue was stopping too fast on errors
+
+ -- Sebastien Senechal <altagir@gmail.com>  Thu, 02 May 2013 22:34:26 -0400
+
+x10-widget (0.3.1) unstable; urgency=high
+
+  * Proper thread stopping & exit, queue management
+  * Improved reading of external commands (remotes)
+  * Improved model for settings (focus, initial params, refresh)
+  * Error handling
+
+ -- Sebastien Senechal <altagir@gmail.com>  Sat, 13 Apr 2013 18:12:06 -0400
+
+x10-widget (0.3.0) unstable; urgency=low
+
+  * SRC now includes Lemay's X10 CM19A driver (not in the debian/arm package)
+    - adapted code for new kernel & Makefile (in x10-src-folder/linux/)
+    - added CMakeList config
+    - modified cm19a.rules to have dev entries writeable on mount for driver
+  * if driver is detected widget will attempt to use (/dev/cm19a[0-9]), else will use libusb directly
+  * libusb is more resilient. if driver stop working, unplug replug the usb controller
+    and restart the service (Start/Stop in widget)
+  * READ external commands on libusb, update values
+  * Notifications from driver are not read (can't figure how to read from pipe without blocking it to driver)
+  * more event based notifications
+  * less logging & colorized output for Log Levels
+
+ -- Sebastien Senechal <altagir@gmail.com>  Sat, 06 Apr 2013 23:39:45 -0400
+
+x10-widget (0.2.4) stable; urgency=low
+
+  * bug fixes, stable
+
+ -- Sebastien Senechal <altagir@gmail.com>  Wed, 03 Apr 2013 20:35:09 -0400
+
+x10-widget (0.2.3) unstable; urgency=low
+
+  * tuned-up slider/timers behavior
+  * timers stopped if coming from different widget
+  * reduced number of events sent
+
+ -- Sebastien Senechal <altagir@gmail.com>  Tue, 02 Apr 2013 23:19:48 -0400
+
+x10-widget (0.2.2) unstable; urgency=high
+
+  * FIX res locations 
+  * added icon on with timer
+  * updated slider behavior
+
+ -- Sebastien Senechal <altagir@gmail.com>  Mon, 01 Apr 2013 14:24:33 -0400
+
+x10-widget (0.2.1) unstable; urgency=low
+
+  * Improve Slider refresh (use SET op and absorb update events)
+
+ -- Sebastien Senechal <altagir@gmail.com>  Sun, 31 Mar 2013 18:40:46 -0400
+
+x10-widget (0.2.0) unstable; urgency=low
+
+  * Remember last lighting value
+  * Disabled non implemented options
+  * SET operation, relaying all logic how to get there to QueueManager
+  * if { OFF - ON - nxDIM } shorter than { mxBRIGHT } commands, perform shortcut
+  * Plasma::DataEngine // Plasma::Service
+     - QueueManager moved there (unique to all widgets_)
+     - holds refs to the DataContainers (requested by plasmoids)
+     - answers to service request from plasmoids, redirecting to dataContainer[source]->service()
+     - Service are used to perform Jobs from plasmoids (like start/stop; sendCmd, SetCmd, ...)
+     - check README for more details
+
+ -- Sebastien Senechal <altagir@gmail.com>  Wed, 27 Mar 2013 10:25:38 -0400
+
+x10-widget (0.1.0) unstable; urgency=low
+
+  * Initial version. Functional, can be put on desktop or panel.
+  * No DataEngine/Service
+  * Widget directly do no update values, send directly to a shared QueueManager.
+
+ -- Sebastien Senechal <altagir@gmail.com>  Wed, 27 Mar 2013 10:22:35 -0400

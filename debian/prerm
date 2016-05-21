@@ -1,0 +1,13 @@
+#!/bin/sh
+# prerm script
+#
+# This script typically stops any daemons which are associated with a package.
+# It is executed before the removal of files associated with the package.
+
+PKG=x10-widget
+
+if [ -f /etc/init.d/x10-daemon ]; then
+    /etc/init.d/x10-daemon stop
+fi
+
+exit 0
